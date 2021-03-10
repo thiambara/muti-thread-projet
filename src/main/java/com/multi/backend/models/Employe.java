@@ -57,7 +57,7 @@ public class Employe implements Serializable {
     private String email;
 
     @Column(name = "bith_date")
-    private Date bithDate;
+    private Date birthDate;
 
     @ManyToOne(fetch = FetchType.EAGER, targetEntity = Service.class)
     @JoinColumn(name = "service_id", referencedColumnName = "id", nullable = false)

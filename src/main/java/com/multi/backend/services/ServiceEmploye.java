@@ -32,7 +32,7 @@ public class ServiceEmploye {
 
     public Employe updateEmploye(Employe employe) {
         Employe registeredEmploye = this.getEmployeById(employe.getId());
-        List<String> fields = Arrays.asList("firstName", "lastName", "email","post", "address", "bithDate");
+        List<String> fields = Arrays.asList("firstName", "lastName", "email","post", "address", "birthDate");
         registeredEmploye = this.conv.pour(registeredEmploye, employe,fields);
         return this.employeRepo.save(registeredEmploye);
     }
