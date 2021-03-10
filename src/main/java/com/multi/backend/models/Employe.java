@@ -35,8 +35,9 @@ import lombok.Data;
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "absences", "pointages"})
 
 public class Employe implements Serializable {
-
+    
     private static final long serialVersionUID = -1503878121631383434L;
+    private static final int MATRICULE_LENGTH = 8;
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -78,6 +79,37 @@ public class Employe implements Serializable {
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)
     private Date createdAt;
+
+    public void generateMatricule(){
+        if (this.matricule==null || this.matricule.trim().isEmpty()) {
+            int prefPosition = (int)Math.floor((Math.random()*(4)));
+            int sufPosition = prefPosition + (int)Math.floor((Math.random()*(MATRICULE_LENGTH-prefPosition))) +1;
+            int i=0;
+            String matr ="";
+            while(i<=MATRICULE_LENGTH){
+                if(i==prefPosition){
+                    matr+=this.prefixeM();
+                    i++;
+                }else if(i==sufPosition){
+                    matr += this.suffixeM();
+                    i++;
+                }else{
+                    int n =(int)Math.floor((Math.random()*10));
+                    matr += n;
+                    i++;
+                }
+            }
+            this.matricule = matr;
+        }
+
+    }
+
+    private Character prefixeM(){
+        return this.firstName .toUpperCase().charAt(0);
+    }
+    private Character suffixeM(){
+        return this.lastName.toUpperCase().charAt(0);
+    }
 
 
 }

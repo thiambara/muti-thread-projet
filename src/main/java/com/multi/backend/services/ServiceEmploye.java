@@ -25,8 +25,9 @@ public class ServiceEmploye {
                 .orElseThrow(() -> new RuntimeException("employe with id " + id + " not found"));
     }
 
-    public Employe addEmploye(Employe service) {
-        return this.employeRepo.save(service);
+    public Employe addEmploye(Employe employe) {
+        employe.generateMatricule();
+        return this.employeRepo.save(employe);
     }
 
     public Employe updateEmploye(Employe employe) {
