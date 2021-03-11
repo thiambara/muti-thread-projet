@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.transaction.Transactional;
 
+import com.multi.backend.models.Employe;
 import com.multi.backend.models.Service;
 import com.multi.backend.repositories.ServiceRepo;
 
@@ -45,5 +46,10 @@ public class ServiceService {
 
     public void deleteService(Long id) {
         this.serviceRepo.deleteById(id);
+    }
+
+    public List<Employe> getServiceEmployes(Long id){
+        Service service = this.getServiceById(id);
+        return service.getEmployes();
     }
 }

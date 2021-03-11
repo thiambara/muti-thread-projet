@@ -4,6 +4,8 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.multi.backend.models.Absence;
+// import com.multi.backend.models.Employe;
+// import com.multi.backend.models.Service;
 import com.multi.backend.repositories.AbsenceRepo;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,4 +45,6 @@ public class ServiceAbsence {
     public void deleteAbsence(Long id) {
         this.absenceRepo.deleteById(id);
     }
+
+    
 }

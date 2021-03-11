@@ -37,7 +37,11 @@ public class Pointage implements Serializable {
 
     @ManyToOne(fetch = FetchType.LAZY, targetEntity = Employe.class)
     @JoinColumn(name = "employe_id", referencedColumnName = "id", nullable = false)
-    private Long employe;
+    private Employe employe;
+
+    @Column(name = "comment")
+    private String comment;
+
 
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)

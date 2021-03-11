@@ -39,7 +39,7 @@ public class Absence implements Serializable {
 
     @ManyToOne(fetch = FetchType.LAZY, targetEntity = Employe.class)
     @JoinColumn(name = "employe_id", referencedColumnName = "id", nullable = false)
-    private Long employe;
+    private Employe employe;
 
     @Enumerated(EnumType.STRING)
     private TypeA type;

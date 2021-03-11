@@ -2,6 +2,7 @@ package com.multi.backend.controllers;
 
 import java.util.List;
 
+import com.multi.backend.models.Employe;
 // import com.multi.backend.models.Employe;
 import com.multi.backend.models.Service;
 // import com.multi.backend.services.ServiceEmploye;
@@ -40,6 +41,12 @@ public class ServiceController {
     public ResponseEntity<Service> getServiceById(@PathVariable("id") Long id) {
         Service service = this.serviceService.getServiceById(id);
         return new ResponseEntity<Service>(service, HttpStatus.OK);
+    }
+
+    @GetMapping("/employes/{id}")
+    public ResponseEntity<List<Employe>> getEmployeAbsence(@PathVariable("id") Long id) {
+        List<Employe> employes = this.serviceService.getServiceEmployes(id);
+        return new ResponseEntity<List<Employe>>(employes, HttpStatus.OK);
     }
 
     @PostMapping("/")

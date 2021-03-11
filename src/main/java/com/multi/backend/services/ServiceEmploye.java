@@ -3,7 +3,9 @@ package com.multi.backend.services;
 import java.util.Arrays;
 import java.util.List;
 
+import com.multi.backend.models.Absence;
 import com.multi.backend.models.Employe;
+import com.multi.backend.models.Pointage;
 import com.multi.backend.repositories.EmployeRepo;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,4 +47,12 @@ public class ServiceEmploye {
         this.employeRepo.deleteById(id);
     }
 
+    public List<Pointage> getEmployePointages(Long id){
+        Employe employe = this.getEmployeById(id);
+        return employe.getPointages();
+    }
+    public List<Absence> getEmployeAbsences(Long id){
+        Employe employe = this.getEmployeById(id);
+        return employe.getAbsences();
+    }
 }

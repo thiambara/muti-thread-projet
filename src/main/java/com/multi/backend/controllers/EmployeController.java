@@ -2,7 +2,9 @@ package com.multi.backend.controllers;
 
 import java.util.List;
 
+import com.multi.backend.models.Absence;
 import com.multi.backend.models.Employe;
+import com.multi.backend.models.Pointage;
 // import com.multi.backend.models.Service;
 import com.multi.backend.services.ServiceEmploye;
 // import com.multi.backend.services.ServiceService;
@@ -42,6 +44,20 @@ public class EmployeController {
 
         Employe employe = this.serviceEmploye.getEmployeById(id);
         return new ResponseEntity<Employe>(employe, HttpStatus.OK);
+    }
+
+    @GetMapping("/pointages/{id}")
+    public ResponseEntity<List<Pointage>> getEmployePointages(@PathVariable("id") Long id) {
+
+        List<Pointage> pointages = this.serviceEmploye.getEmployePointages(id);
+        return new ResponseEntity<List<Pointage>>(pointages, HttpStatus.OK);
+    }
+
+    @GetMapping("/absences/'id}")
+    public ResponseEntity<List<Absence>> getEmployeAbsences(@PathVariable("id") Long id) {
+
+        List<Absence> absences = this.serviceEmploye.getEmployeAbsences(id);
+        return new ResponseEntity<List<Absence>>(absences, HttpStatus.OK);
     }
 
     @PostMapping("/")
