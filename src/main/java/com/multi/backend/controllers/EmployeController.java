@@ -53,7 +53,7 @@ public class EmployeController {
         return new ResponseEntity<List<Pointage>>(pointages, HttpStatus.OK);
     }
 
-    @GetMapping("/absences/'id}")
+    @GetMapping("/absences/{id}")
     public ResponseEntity<List<Absence>> getEmployeAbsences(@PathVariable("id") Long id) {
 
         List<Absence> absences = this.serviceEmploye.getEmployeAbsences(id);
