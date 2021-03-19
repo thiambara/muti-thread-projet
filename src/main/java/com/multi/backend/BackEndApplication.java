@@ -6,6 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 // import java.util.Arrays;
 
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 // import org.springframework.web.cors.CorsConfiguration;
 // import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -32,6 +33,11 @@ public class BackEndApplication {
 			.apis(RequestHandlerSelectors.basePackage("com.multi"))
 			.paths(PathSelectors.any())
 			.build();
+	}
+
+	@Bean 
+	public BCryptPasswordEncoder bCryptPasswordEncoder() {
+		return new BCryptPasswordEncoder(); 
 	}
 
 	// @Bean

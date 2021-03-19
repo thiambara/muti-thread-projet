@@ -7,26 +7,34 @@ import com.multi.backend.models.User;
 import com.multi.backend.repositories.UserRepo;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 
 @org.springframework.stereotype.Service
 @Transactional
-public class ServiceUser {
+public class ServiceUser implements UserDetailsService {
     @Autowired
     private UserRepo userRepo;
     @Autowired
     private Conv<User> conv;
 
-
-
     public User getUserById(Long id) {
-        if(id == null){
+        if (id == null) {
             throw new NullPointerException("id user not provied");
         }
         return this.userRepo.findById(id).orElseThrow(() -> new RuntimeException("user with id " + id + " not found"));
     }
 
+    @Transactional(rollbackFor = Exception.class)
     public User addUser(User user) {
+        user.setPassword((new BCryptPasswordEncoder()).encode(user.getPassword()));
+        user.setAccountNonExpired(true);
+        user.setAccountNonLocked(true);
+        user.setCredentialsNonExpired(true);
+        user.setEnabled(true);
         return this.userRepo.save(user);
     }
 
@@ -37,11 +45,20 @@ public class ServiceUser {
     public User updateUser(User user) {
         User registeredUser = this.getUserById(user.getId());
         List<String> fields = Arrays.asList("username");
-        registeredUser = this.conv.pour(registeredUser, user,fields);
+        registeredUser = this.conv.pour(registeredUser, user, fields);
         return this.userRepo.save(registeredUser);
     }
 
     public void deleteUser(Long id) {
         this.userRepo.deleteById(id);
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        return this.userRepo.findByUsername(username)
+        .orElseThrow(() ->
+        new UsernameNotFoundException(String.format("Username %s not found",
+        username))
+        );
     }
 }
