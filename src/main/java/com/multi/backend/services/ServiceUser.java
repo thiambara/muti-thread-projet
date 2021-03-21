@@ -10,7 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+// import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 
 @org.springframework.stereotype.Service
@@ -20,6 +21,8 @@ public class ServiceUser implements UserDetailsService {
     private UserRepo userRepo;
     @Autowired
     private Conv<User> conv;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     public User getUserById(Long id) {
         if (id == null) {
@@ -30,7 +33,7 @@ public class ServiceUser implements UserDetailsService {
 
     @Transactional(rollbackFor = Exception.class)
     public User addUser(User user) {
-        user.setPassword((new BCryptPasswordEncoder()).encode(user.getPassword()));
+        user.setPassword(this.passwordEncoder.encode(user.getPassword()));
         user.setAccountNonExpired(true);
         user.setAccountNonLocked(true);
         user.setCredentialsNonExpired(true);
@@ -56,9 +59,6 @@ public class ServiceUser implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return this.userRepo.findByUsername(username)
-        .orElseThrow(() ->
-        new UsernameNotFoundException(String.format("Username %s not found",
-        username))
-        );
+                .orElseThrow(() -> new UsernameNotFoundException(String.format("Username %s not found", username)));
     }
 }

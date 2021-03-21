@@ -30,16 +30,14 @@ public class JwtTokenVerifier extends OncePerRequestFilter {
     private final SecretKey secretKey;
     private final JwtConfig jwtConfig;
 
-    public JwtTokenVerifier(SecretKey secretKey,
-                            JwtConfig jwtConfig) {
+    public JwtTokenVerifier(SecretKey secretKey, JwtConfig jwtConfig) {
         this.secretKey = secretKey;
         this.jwtConfig = jwtConfig;
     }
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request,
-                                    HttpServletResponse response,
-                                    FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+            throws ServletException, IOException {
 
         String authorizationHeader = request.getHeader(jwtConfig.getAuthorizationHeader());
 
@@ -52,10 +50,7 @@ public class JwtTokenVerifier extends OncePerRequestFilter {
 
         try {
 
-            Jws<Claims> claimsJws = Jwts.parserBuilder()
-                    .setSigningKey(secretKey)
-                    .build()
-                    .parseClaimsJws(token);
+            Jws<Claims> claimsJws = Jwts.parserBuilder().setSigningKey(secretKey).build().parseClaimsJws(token);
 
             Claims body = claimsJws.getBody();
 
@@ -64,14 +59,10 @@ public class JwtTokenVerifier extends OncePerRequestFilter {
             var authorities = (List<Map<String, String>>) body.get("authorities");
 
             Set<SimpleGrantedAuthority> simpleGrantedAuthorities = authorities.stream()
-                    .map(m -> new SimpleGrantedAuthority(m.get("authority")))
-                    .collect(Collectors.toSet());
+                    .map(m -> new SimpleGrantedAuthority(m.get("authority"))).collect(Collectors.toSet());
 
-            Authentication authentication = new UsernamePasswordAuthenticationToken(
-                    username,
-                    null,
-                    simpleGrantedAuthorities
-            );
+            Authentication authentication = new UsernamePasswordAuthenticationToken(username, null,
+                    simpleGrantedAuthorities);
 
             SecurityContextHolder.getContext().setAuthentication(authentication);
 
