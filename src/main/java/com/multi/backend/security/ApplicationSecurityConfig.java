@@ -57,15 +57,15 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
                 .csrf()
                 .disable()
                 .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and()
-                .addFilter(new JwtUsernameAndPasswordAuthenticationFilter(authenticationManager(), jwtConfig, secretKey))
-                .addFilterAfter(new JwtTokenVerifier(secretKey, jwtConfig),JwtUsernameAndPasswordAuthenticationFilter.class)
-                .authorizeRequests()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+                // .and()
+                // .addFilter(new JwtUsernameAndPasswordAuthenticationFilter(authenticationManager(), jwtConfig, secretKey))
+                // .addFilterAfter(new JwtTokenVerifier(secretKey, jwtConfig),JwtUsernameAndPasswordAuthenticationFilter.class)
+                // .authorizeRequests()
                 // .antMatchers("/", "index", "/css/*", "/js/*").permitAll()
                 // .antMatchers("/api/**").hasRole(STUDENT.name())
-                .anyRequest()
-                .authenticated();
+                // .anyRequest()
+                // .authenticated();
     }
 
     @Override
