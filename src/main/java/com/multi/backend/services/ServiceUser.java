@@ -7,6 +7,7 @@ import com.multi.backend.models.User;
 import com.multi.backend.repositories.UserRepo;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -56,9 +57,15 @@ public class ServiceUser implements UserDetailsService {
         this.userRepo.deleteById(id);
     }
 
+    public User getAuthenticateUser() {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        return this.userRepo.findByUsername(username).orElseThrow(
+                () -> new UsernameNotFoundException(String.format("User with username %s not found", username)));
+    }
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return this.userRepo.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException(String.format("Username %s not found", username)));
+        return this.userRepo.findByUsername(username).orElseThrow(
+                () -> new UsernameNotFoundException(String.format("User with username %s not found", username)));
     }
 }

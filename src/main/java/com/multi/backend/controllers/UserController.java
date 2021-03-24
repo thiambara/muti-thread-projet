@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
-
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api/users")
@@ -57,6 +56,12 @@ public class UserController {
     public ResponseEntity<User> deleteUser(@PathVariable("id") Long id) {
         User user = this.serviceUser.getUserById(id);
         this.serviceUser.deleteUser(user.getId());
+        return new ResponseEntity<User>(user, HttpStatus.OK);
+    }
+
+    @GetMapping("/authenticated-user")
+    public ResponseEntity<User> rien() {
+        User user = this.serviceUser.getAuthenticateUser();
         return new ResponseEntity<User>(user, HttpStatus.OK);
     }
 
