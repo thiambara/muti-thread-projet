@@ -60,9 +60,16 @@ public class UserController {
     }
 
     @GetMapping("/authenticated-user")
-    public ResponseEntity<User> rien() {
+    public ResponseEntity<User> getAuthenticatedUser() {
         User user = this.serviceUser.getAuthenticateUser();
+        user.setPassword(null);
         return new ResponseEntity<User>(user, HttpStatus.OK);
+    }
+
+    @PostMapping("/change-authenticated-user-password")
+    public ResponseEntity<Boolean> changeAuthenticatedUserPassword(@RequestBody String password) {
+        Boolean result = this.serviceUser.changeAuthenticatedUserPassword(password);
+        return new ResponseEntity<Boolean>(result, HttpStatus.OK);
     }
 
 }

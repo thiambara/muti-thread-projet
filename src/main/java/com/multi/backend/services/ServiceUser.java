@@ -34,7 +34,8 @@ public class ServiceUser implements UserDetailsService {
 
     @Transactional(rollbackFor = Exception.class)
     public User addUser(User user) {
-        user.setPassword(this.passwordEncoder.encode(user.getPassword()));
+        String encodedPassword = this.passwordEncoder.encode(user.getPassword());
+        user.setPassword(encodedPassword);
         user.setAccountNonExpired(true);
         user.setAccountNonLocked(true);
         user.setCredentialsNonExpired(true);
@@ -48,7 +49,7 @@ public class ServiceUser implements UserDetailsService {
 
     public User updateUser(User user) {
         User registeredUser = this.getUserById(user.getId());
-        List<String> fields = Arrays.asList("username");
+        List<String> fields = Arrays.asList("firstName", "lastName", "email");
         registeredUser = this.conv.pour(registeredUser, user, fields);
         return this.userRepo.save(registeredUser);
     }
@@ -67,5 +68,16 @@ public class ServiceUser implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return this.userRepo.findByUsername(username).orElseThrow(
                 () -> new UsernameNotFoundException(String.format("User with username %s not found", username)));
+    }
+
+    public Boolean changeAuthenticatedUserPassword(String password) {
+        if (password == null || password.length() < 8) {
+            throw new NullPointerException("Le mot de passe fourni n'est pas valide");
+        }
+        User user = this.getAuthenticateUser();
+        String encodedPassword = this.passwordEncoder.encode(password.trim());
+        user.setPassword(encodedPassword);
+        this.userRepo.save(user);
+        return true;
     }
 }
