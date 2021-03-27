@@ -49,7 +49,7 @@ public class ServiceUser implements UserDetailsService {
 
     public User updateUser(User user) {
         User registeredUser = this.getUserById(user.getId());
-        List<String> fields = Arrays.asList("firstName", "lastName", "email");
+        List<String> fields = Arrays.asList("firstName", "role", "lastName", "email");
         registeredUser = this.conv.pour(registeredUser, user, fields);
         return this.userRepo.save(registeredUser);
     }
@@ -62,6 +62,12 @@ public class ServiceUser implements UserDetailsService {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         return this.userRepo.findByUsername(username).orElseThrow(
                 () -> new UsernameNotFoundException(String.format("User with username %s not found", username)));
+    }
+
+    public User findUserByUsername(String username) throws UsernameNotFoundException {
+        return this.userRepo.findByUsername(username).orElseThrow(
+                () -> new UsernameNotFoundException(String.format("User with username %s not found", username)));
+
     }
 
     @Override

@@ -1,11 +1,15 @@
 package com.multi.backend.models;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -14,6 +18,7 @@ import javax.persistence.Transient;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import lombok.Data;
@@ -21,9 +26,14 @@ import lombok.Data;
 @Data
 @Entity
 @Table(name = "users")
-public class User implements  UserDetails {
-    
+public class User implements UserDetails {
+
     private static final long serialVersionUID = 7042921310858009366L;
+    private static final String ROLE_PREFIX = "ROLE_";
+
+    public enum Role {
+        SUPER_ADMIN, ADMIN, SUPERVISEUR
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -33,8 +43,12 @@ public class User implements  UserDetails {
     @Column(nullable = false, unique = true)
     private String username;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String password;
+
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private Role role = Role.SUPERVISEUR;
 
     @Column(name = "first_name")
     private String firstName;
@@ -48,7 +62,7 @@ public class User implements  UserDetails {
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)
     private Date createdAt;
-    
+
     @Column(name = "is_account_non_expired")
     private boolean isAccountNonExpired;
     @Column(name = "is_account_non_locked")
@@ -57,20 +71,17 @@ public class User implements  UserDetails {
     private boolean isCredentialsNonExpired;
     @Column(name = "is_enabled")
     private boolean isEnabled;
-    
+
     @Transient
     private Set<? extends GrantedAuthority> grantedAuthorities;
-    public User (){
+
+    public User() {
         // Constructor
     }
 
-    public User(String username,
-    String password,
-    Set<? extends GrantedAuthority> grantedAuthorities,
-    boolean isAccountNonExpired,
-    boolean isAccountNonLocked,
-    boolean isCredentialsNonExpired,
-    boolean isEnabled){
+    public User(String username, String password, Set<? extends GrantedAuthority> grantedAuthorities,
+            boolean isAccountNonExpired, boolean isAccountNonLocked, boolean isCredentialsNonExpired,
+            boolean isEnabled) {
         this.username = username;
         this.password = password;
         this.grantedAuthorities = grantedAuthorities;
@@ -84,43 +95,45 @@ public class User implements  UserDetails {
         return serialVersionUID;
     }
 
-    public void setUsername(String username){
+    public void setUsername(String username) {
         this.username = username;
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return grantedAuthorities;
+        List<GrantedAuthority> list = new ArrayList<GrantedAuthority>();
+        list.add(new SimpleGrantedAuthority(ROLE_PREFIX + role));
+        return list;
     }
 
     // @Override
     // public String getPassword() {
-    //     return password;
+    // return password;
     // }
 
     // @Override
     // public String getUsername() {
-    //     return username;
+    // return username;
     // }
 
     // @Override
     // public boolean isAccountNonExpired() {
-    //     return isAccountNonExpired;
+    // return isAccountNonExpired;
     // }
 
     // @Override
     // public boolean isAccountNonLocked() {
-    //     return isAccountNonLocked;
+    // return isAccountNonLocked;
     // }
 
     // @Override
     // public boolean isCredentialsNonExpired() {
-    //     return isCredentialsNonExpired;
+    // return isCredentialsNonExpired;
     // }
 
     // @Override
     // public boolean isEnabled() {
-    //     return isEnabled;
+    // return isEnabled;
     // }
 
 }

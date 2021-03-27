@@ -8,6 +8,7 @@ import com.multi.backend.services.ServiceAbsence;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,7 +18,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.CrossOrigin;
-
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -40,12 +40,14 @@ public class AbsenceController {
     }
 
     @PostMapping("/")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_SUPERVISEUR')")
     public ResponseEntity<Absence> addAbsence(@RequestBody Absence absence) {
         absence = this.serviceAbsence.addAbsence(absence);
         return new ResponseEntity<Absence>(absence, HttpStatus.OK);
     }
 
     @PutMapping("{id}")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_SUPERVISEUR')")
     public ResponseEntity<Absence> updateAbsence(@PathVariable("id") Long id, @RequestBody Absence absence) {
         absence.setId(id);
         Absence updatedAbsence = this.serviceAbsence.updateAbsence(absence);
@@ -54,6 +56,7 @@ public class AbsenceController {
     }
 
     @DeleteMapping("{id}")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_SUPERVISEUR')")
     public ResponseEntity<Absence> deleteAbsence(@PathVariable("id") Long id) {
         Absence absence = this.serviceAbsence.getAbsenceById(id);
         this.serviceAbsence.deleteAbsence(absence.getId());

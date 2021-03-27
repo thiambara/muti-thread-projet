@@ -1,17 +1,23 @@
 package com.multi.backend.jwt;
 
 import com.google.common.base.Strings;
+// import com.multi.backend.models.User;
+import com.multi.backend.services.ServiceUser;
+
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import lombok.var;
 
-// import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+// import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.crypto.SecretKey;
@@ -20,6 +26,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -29,6 +37,8 @@ public class JwtTokenVerifier extends OncePerRequestFilter {
 
     private final SecretKey secretKey;
     private final JwtConfig jwtConfig;
+    @Autowired
+    private ServiceUser serviceUser;
 
     public JwtTokenVerifier(SecretKey secretKey, JwtConfig jwtConfig) {
         this.secretKey = secretKey;
@@ -57,12 +67,22 @@ public class JwtTokenVerifier extends OncePerRequestFilter {
             String username = body.getSubject();
 
             var authorities = (List<Map<String, String>>) body.get("authorities");
+            Collection<? extends GrantedAuthority> grantedAuthorities = new HashSet<>();
+
+            try {
+
+                UserDetails curentUser = serviceUser.loadUserByUsername(username);
+                grantedAuthorities = curentUser.getAuthorities();
+            } catch (Exception e) {
+                // TODO: handle exception
+                // e.printStackTrace();
+            }
 
             Set<SimpleGrantedAuthority> simpleGrantedAuthorities = authorities.stream()
                     .map(m -> new SimpleGrantedAuthority(m.get("authority"))).collect(Collectors.toSet());
 
             Authentication authentication = new UsernamePasswordAuthenticationToken(username, null,
-                    simpleGrantedAuthorities);
+                    !grantedAuthorities.isEmpty() ? grantedAuthorities : simpleGrantedAuthorities);
 
             SecurityContextHolder.getContext().setAuthentication(authentication);
 

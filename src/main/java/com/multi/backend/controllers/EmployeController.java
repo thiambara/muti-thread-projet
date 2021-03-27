@@ -12,6 +12,7 @@ import com.multi.backend.services.ServiceEmploye;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 // import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -61,12 +62,14 @@ public class EmployeController {
     }
 
     @PostMapping("/")
+    @PreAuthorize("hasAnyAuthority('ROLE_SUPER_ADMIN')")
     public ResponseEntity<Employe> addEmploye(@RequestBody Employe employe) {
         employe = this.serviceEmploye.addEmploye(employe);
         return new ResponseEntity<Employe>(employe, HttpStatus.OK);
     }
 
     @PutMapping("{id}")
+    @PreAuthorize("hasAnyAuthority('ROLE_SUPER_ADMIN')")
     public ResponseEntity<Employe> updateEmploye(@PathVariable("id") Long id, @RequestBody Employe employe) {
         employe.setId(id);
         Employe updatedEmploye = this.serviceEmploye.updateEmploye(employe);
@@ -75,6 +78,7 @@ public class EmployeController {
     }
 
     @DeleteMapping("{id}")
+    @PreAuthorize("hasAnyAuthority('ROLE_SUPER_ADMIN')")
     public ResponseEntity<Employe> deleteEmploye(@PathVariable("id") Long id) {
         Employe employe = this.serviceEmploye.getEmployeById(id);
         this.serviceEmploye.deleteEmploye(employe.getId());
