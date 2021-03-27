@@ -48,16 +48,17 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.cors().and().csrf().disable().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and()
-                .addFilter(
-                        new JwtUsernameAndPasswordAuthenticationFilter(authenticationManager(), jwtConfig, secretKey))
-                .addFilterAfter(new JwtTokenVerifier(secretKey, jwtConfig),
-                        JwtUsernameAndPasswordAuthenticationFilter.class)
-                .authorizeRequests()
-                // .antMatchers("/", "index", "/css/*", "/js/*").permitAll()
-                // .antMatchers("/api/**").hasRole(STUDENT.name())
-                .anyRequest().authenticated();
+        http.cors().and().csrf().disable().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+        // .and()
+        // .addFilter(
+        // new JwtUsernameAndPasswordAuthenticationFilter(authenticationManager(),
+        // jwtConfig, secretKey))
+        // .addFilterAfter(new JwtTokenVerifier(secretKey, jwtConfig),
+        // JwtUsernameAndPasswordAuthenticationFilter.class)
+        // .authorizeRequests()
+        // // .antMatchers("/", "index", "/css/*", "/js/*").permitAll()
+        // // .antMatchers("/api/**").hasRole(STUDENT.name())
+        // .anyRequest().authenticated();
     }
 
     @Override
