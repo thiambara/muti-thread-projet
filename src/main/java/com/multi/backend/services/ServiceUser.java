@@ -3,8 +3,11 @@ package com.multi.backend.services;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.mail.MessagingException;
+
 import com.multi.backend.models.User;
 import com.multi.backend.repositories.UserRepo;
+import com.multi.backend.services.email.EmailService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -14,6 +17,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 // import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
+
+import io.jsonwebtoken.io.IOException;
 
 @org.springframework.stereotype.Service
 @Transactional
@@ -25,6 +30,9 @@ public class ServiceUser implements UserDetailsService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Autowired
+    private EmailService emailService;
+
     public User getUserById(Long id) {
         if (id == null) {
             throw new NullPointerException("id user not provied");
@@ -34,13 +42,25 @@ public class ServiceUser implements UserDetailsService {
 
     @Transactional(rollbackFor = Exception.class)
     public User addUser(User user) {
-        String encodedPassword = this.passwordEncoder.encode(user.getPassword());
+        String password = user.getPassword();
+        if (password == null || password.length() < 8) {
+            password = User.generatePassword();
+        }
+        String encodedPassword = this.passwordEncoder.encode(password);
         user.setPassword(encodedPassword);
         user.setAccountNonExpired(true);
         user.setAccountNonLocked(true);
         user.setCredentialsNonExpired(true);
         user.setEnabled(true);
-        return this.userRepo.save(user);
+
+        user = this.userRepo.save(user);
+        try {
+            this.emailService.sendEmailNewUserConnexionInfos(user, password);
+        } catch (IOException | MessagingException e) {
+            e.printStackTrace();
+        }
+        // user.setPassword("");
+        return user;
     }
 
     public List<User> getAllUsers() {

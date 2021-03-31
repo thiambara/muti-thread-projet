@@ -46,6 +46,7 @@ public class UserController {
     @PreAuthorize("hasAnyAuthority('ROLE_SUPER_ADMIN')")
     public ResponseEntity<User> addUser(@RequestBody User user) {
         user = this.serviceUser.addUser(user);
+        user.setPassword(null);
         return new ResponseEntity<User>(user, HttpStatus.OK);
     }
 
