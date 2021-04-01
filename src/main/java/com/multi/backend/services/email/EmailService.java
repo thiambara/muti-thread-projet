@@ -40,7 +40,7 @@ public class EmailService {
         Context context = new Context();
         context.setVariables(props);
         String html = templateEngine.process("new-user-password-email", context);
-        helper.setFrom("thiambarathiam97@gmail.com");
+        helper.setFrom("mamine.thiam@univ-thies.sn");
         helper.setTo(user.getEmail());
         helper.setSubject("Information de connexion de votre nouveau compte utilisateur");
         helper.setText(html, true);
