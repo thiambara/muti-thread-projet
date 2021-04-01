@@ -1,6 +1,5 @@
 package com.multi.backend.services.email;
 
-import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -22,15 +21,16 @@ import io.jsonwebtoken.io.IOException;
 public class EmailService {
 
     @Autowired
-    private JavaMailSender emailSender;
-
+    private JavaMailSender javaMmailSender;
     @Autowired
     private SpringTemplateEngine templateEngine;
 
     public void sendEmailNewUserConnexionInfos(User user, String password) throws MessagingException, IOException {
-        MimeMessage message = emailSender.createMimeMessage();
-        MimeMessageHelper helper = new MimeMessageHelper(message, MimeMessageHelper.MULTIPART_MODE_MIXED_RELATED,
-                StandardCharsets.UTF_8.name());
+        MimeMessage message = javaMmailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(message, true);
+        // MimeMessageHelper helper = new MimeMessageHelper(message,
+        // MimeMessageHelper.MULTIPART_MODE_MIXED_RELATED,
+        // StandardCharsets.UTF_8.name());
 
         Map<String, Object> props = new HashMap<String, Object>();
         props.put("firstName", user.getFirstName());
@@ -40,11 +40,11 @@ public class EmailService {
         Context context = new Context();
         context.setVariables(props);
         String html = templateEngine.process("new-user-password-email", context);
+        helper.setFrom("thiambarathiam97@gmail.com");
         helper.setTo(user.getEmail());
         helper.setSubject("Information de connexion de votre nouveau compte utilisateur");
         helper.setText(html, true);
-
-        emailSender.send(message);
+        javaMmailSender.send(message);
     }
 
 }
