@@ -20,7 +20,7 @@ public class ServiceEmploye {
     private Conv<Employe> conv;
 
     public Employe getEmployeById(Long id) {
-        if(id == null){
+        if (id == null) {
             throw new NullPointerException("id employe not provied");
         }
         return this.employeRepo.findById(id)
@@ -34,8 +34,8 @@ public class ServiceEmploye {
 
     public Employe updateEmploye(Employe employe) {
         Employe registeredEmploye = this.getEmployeById(employe.getId());
-        List<String> fields = Arrays.asList("firstName", "lastName", "email","post", "address", "birthDate");
-        registeredEmploye = this.conv.pour(registeredEmploye, employe,fields);
+        List<String> fields = Arrays.asList("firstName", "lastName", "email", "post", "address", "birthDate");
+        registeredEmploye = this.conv.pour(registeredEmploye, employe, fields);
         return this.employeRepo.save(registeredEmploye);
     }
 
@@ -47,12 +47,19 @@ public class ServiceEmploye {
         this.employeRepo.deleteById(id);
     }
 
-    public List<Pointage> getEmployePointages(Long id){
+    public List<Pointage> getEmployePointages(Long id) {
         Employe employe = this.getEmployeById(id);
         return employe.getPointages();
     }
-    public List<Absence> getEmployeAbsences(Long id){
+
+    public List<Absence> getEmployeAbsences(Long id) {
         Employe employe = this.getEmployeById(id);
         return employe.getAbsences();
     }
+
+    public Boolean isEmailAlreadyInEmploye(String email) {
+        Employe[] employes = this.employeRepo.findByEmail(email.trim()).orElse(null);
+        return (employes != null) && employes.length>0;
+    }
+
 }

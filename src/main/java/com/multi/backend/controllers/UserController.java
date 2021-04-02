@@ -80,4 +80,9 @@ public class UserController {
         return new ResponseEntity<Boolean>(result, HttpStatus.OK);
     }
 
+    @PostMapping("/username-already-exists")
+    public ResponseEntity<Boolean> verifyUsernameAlreadyExist(@RequestBody String username) {
+        return new ResponseEntity<Boolean>(this.serviceUser.isUsernameAlreadyInUse(username), HttpStatus.OK);
+    }
+
 }

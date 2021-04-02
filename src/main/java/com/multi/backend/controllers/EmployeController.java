@@ -85,4 +85,9 @@ public class EmployeController {
         return new ResponseEntity<Employe>(employe, HttpStatus.OK);
     }
 
+    @PostMapping("/email-already-exists")
+    public ResponseEntity<Boolean> verifyEmailAlreadyExist(@RequestBody String email) {
+        return new ResponseEntity<Boolean>(this.serviceEmploye.isEmailAlreadyInEmploye(email), HttpStatus.OK);
+    }
+
 }

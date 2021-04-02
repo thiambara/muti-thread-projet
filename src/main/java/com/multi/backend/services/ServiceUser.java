@@ -97,13 +97,19 @@ public class ServiceUser implements UserDetailsService {
     }
 
     public Boolean changeAuthenticatedUserPassword(String password) {
+        password = password.trim();
         if (password == null || password.length() < 8) {
             throw new NullPointerException("Le mot de passe fourni n'est pas valide");
         }
         User user = this.getAuthenticateUser();
-        String encodedPassword = this.passwordEncoder.encode(password.trim());
+        String encodedPassword = this.passwordEncoder.encode(password);
         user.setPassword(encodedPassword);
         this.userRepo.save(user);
         return true;
+    }
+
+    public Boolean isUsernameAlreadyInUse(String username) {
+        User user = this.userRepo.findByUsername(username.trim()).orElse(null);
+        return user != null;
     }
 }
