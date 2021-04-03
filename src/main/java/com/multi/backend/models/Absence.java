@@ -48,8 +48,12 @@ public class Absence implements Serializable {
     private String justificatif;
 
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "date_a")
-    private Date dateA;
+    @Column(name = "from_date")
+    private Date fromDate;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "to_date")
+    private Date toDate;
 
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)

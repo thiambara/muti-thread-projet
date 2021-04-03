@@ -5,6 +5,8 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -27,6 +29,9 @@ import lombok.Data;
   generator = ObjectIdGenerators.PropertyGenerator.class, 
   property = "id")
 public class Pointage implements Serializable {
+  public enum TypeP {
+    ENTRANT, SORTANT
+  }
 
     private static final long serialVersionUID = 6015442161480162671L;
 
@@ -38,6 +43,9 @@ public class Pointage implements Serializable {
     @ManyToOne(fetch = FetchType.LAZY, targetEntity = Employe.class)
     @JoinColumn(name = "employe_id", referencedColumnName = "id", nullable = false)
     private Employe employe;
+    
+    @Enumerated(EnumType.STRING)
+    private TypeP type;
 
     @Column(name = "comment")
     private String comment;
