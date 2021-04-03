@@ -52,4 +52,8 @@ public class ServiceService {
         Service service = this.getServiceById(id);
         return service.getEmployes();
     }
+    public Boolean isNameAlreadyInService(String name) {
+        Service[] services = this.serviceRepo.findByName(name.trim()).orElse(null);
+        return (services != null) && services.length>0;
+    }
 }

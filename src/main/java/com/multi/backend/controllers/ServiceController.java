@@ -75,4 +75,10 @@ public class ServiceController {
         return new ResponseEntity<Service>(service, HttpStatus.OK);
     }
 
+    @PostMapping("/name-already-exists")
+    public ResponseEntity<Boolean> verifyNameAlreadyExist(@RequestBody String name) {
+        return new ResponseEntity<Boolean>(this.serviceService.isNameAlreadyInService(name), HttpStatus.OK);
+    }
+    
+
 }

@@ -57,11 +57,21 @@ public class PointageController {
     // }
 
     @DeleteMapping("{id}")
-    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'SUPER_ADMIN')")
     public ResponseEntity<Pointage> deletePointage(@PathVariable("id") Long id) {
         Pointage pointage = this.servicePointage.getPointageById(id);
         this.servicePointage.deletePointage(pointage.getId());
         return new ResponseEntity<Pointage>(pointage, HttpStatus.OK);
     }
+
+    @GetMapping("/last-pointage/{id}")
+    @PreAuthorize("hasAnyAuthority('ROLE_SUPERVISEUR')")
+    public ResponseEntity<Pointage> getLastEmployePointage(@PathVariable("id") Long employeId) {
+        return new ResponseEntity<Pointage>(this.servicePointage.lastEmployePointage(employeId), HttpStatus.OK);
+    }
+
+    
+
+    
 
 }

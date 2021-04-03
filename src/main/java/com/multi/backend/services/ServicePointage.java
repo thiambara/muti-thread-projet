@@ -34,4 +34,9 @@ public class ServicePointage {
     public void deletePointage(Long id) {
         this.pointageRepo.deleteById(id);
     }
+
+    public Pointage lastEmployePointage(Long employeId){
+        return this.pointageRepo.findTopByEmployeIdOrderByCreatedAtDesc(employeId);
+
+    }
 }
