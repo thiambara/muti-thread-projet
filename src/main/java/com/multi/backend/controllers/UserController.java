@@ -79,6 +79,11 @@ public class UserController {
         Boolean result = this.serviceUser.changeAuthenticatedUserPassword(password);
         return new ResponseEntity<Boolean>(result, HttpStatus.OK);
     }
+    @PostMapping("/reset-password")
+    public ResponseEntity<Boolean> passwordReinitialisation(@RequestBody String username) {
+        Boolean result = this.serviceUser.resetPaasword(username);
+        return new ResponseEntity<Boolean>(result, HttpStatus.OK);
+    }
 
     @PostMapping("/username-already-exists")
     public ResponseEntity<Boolean> verifyUsernameAlreadyExist(@RequestBody String username) {

@@ -46,5 +46,26 @@ public class EmailService {
         helper.setText(html, true);
         javaMmailSender.send(message);
     }
+    public void sendEmailResetPassword(User user, String password) throws MessagingException, IOException {
+        MimeMessage message = javaMmailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(message, true);
+        // MimeMessageHelper helper = new MimeMessageHelper(message,
+        // MimeMessageHelper.MULTIPART_MODE_MIXED_RELATED,
+        // StandardCharsets.UTF_8.name());
+
+        Map<String, Object> props = new HashMap<String, Object>();
+        props.put("firstName", user.getFirstName());
+        props.put("lastName", user.getLastName());
+        props.put("username", user.getUsername());
+        props.put("password", password);
+        Context context = new Context();
+        context.setVariables(props);
+        String html = templateEngine.process("reset-password-email", context);
+        helper.setFrom("mamine.thiam@univ-thies.sn");
+        helper.setTo(user.getEmail());
+        helper.setSubject("Reinitialisation du mot de passe de votre compte utilisateur");
+        helper.setText(html, true);
+        javaMmailSender.send(message);
+    }
 
 }

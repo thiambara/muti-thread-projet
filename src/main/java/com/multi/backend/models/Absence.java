@@ -29,7 +29,7 @@ public class Absence implements Serializable {
     private static final long serialVersionUID = -289086587570597206L;
 
     public enum TypeA {
-        MALADIE, CONGE, MATERNITE, MALADIT
+        MALADIE, CONGE, MATERNITE
     }
 
     @Id

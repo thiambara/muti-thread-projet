@@ -112,4 +112,20 @@ public class ServiceUser implements UserDetailsService {
         User user = this.userRepo.findByUsername(username.trim()).orElse(null);
         return user != null;
     }
+    public Boolean resetPaasword(String username) {
+        User user = this.userRepo.findByUsername(username.trim()).orElse(null);
+        if (user != null) {
+            String password = User.generatePassword();
+            String encodedPassword = this.passwordEncoder.encode(password);
+            user.setPassword(encodedPassword);
+            this.userRepo.save(user);
+            try {
+                this.emailService.sendEmailResetPassword(user, password);
+            } catch (IOException | MessagingException e) {
+                e.printStackTrace();
+            }
+            return true;
+        }
+        return false;
+    }
 }
