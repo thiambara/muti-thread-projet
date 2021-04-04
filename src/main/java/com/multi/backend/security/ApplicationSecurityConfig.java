@@ -55,7 +55,7 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
                 .addFilterAfter(new JwtTokenVerifier(secretKey, jwtConfig),
                         JwtUsernameAndPasswordAuthenticationFilter.class)
                 .authorizeRequests()
-                // .antMatchers("/", "index", "/css/*", "/js/*").permitAll()
+                .antMatchers("/", "index", "/css/*", "/js/*","/api/users/reset-password","/api/users/username-already-exists").permitAll()
                 // .antMatchers("/api/**").hasRole(STUDENT.name())
                 .anyRequest().authenticated();
     }
@@ -78,7 +78,7 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
         CorsConfiguration corsConfiguration = new CorsConfiguration();
         corsConfiguration.setAllowCredentials(true);
         corsConfiguration
-                .setAllowedOrigins(Arrays.asList("http://localhost:4200", "https://multi-thread-front-end.web.app"));
+                .setAllowedOrigins(Arrays.asList("http://localhost:4200","http://localhost:*", "https://multi-thread-front-end.web.app"));
         corsConfiguration.setAllowedHeaders(Arrays.asList("Origin", "Access-Control-Allow-Origin", "Content-Type",
                 "Accept", "Authorization", "Origin, Accept", "X-Requested-With", "Access-Control-Request-Method",
                 "Access-Control-Request-Headers"));
