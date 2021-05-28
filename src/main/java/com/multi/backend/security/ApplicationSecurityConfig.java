@@ -48,16 +48,16 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.cors().and().csrf().disable().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-                /*.and()
+        http.cors().and().csrf().disable().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
                 .addFilter(
                         new JwtUsernameAndPasswordAuthenticationFilter(authenticationManager(), jwtConfig, secretKey))
                 .addFilterAfter(new JwtTokenVerifier(secretKey, jwtConfig),
                         JwtUsernameAndPasswordAuthenticationFilter.class)
                 .authorizeRequests()
-                .antMatchers("/", "/**swagger**", "index", "/css/*", "/js/*","/api/users/reset-password","/api/users/username-already-exists").permitAll()
+                .antMatchers("/", "index", "/css/*", "/js/*","/api/users/reset-password","/api/users/username-already-exists").permitAll()
                 // .antMatchers("/api/**").hasRole(STUDENT.name())
-                .anyRequest().authenticated();*/
+                .anyRequest().authenticated();
     }
 
     @Override
