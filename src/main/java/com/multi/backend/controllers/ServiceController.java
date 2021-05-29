@@ -44,12 +44,11 @@ public class ServiceController {
         return new ResponseEntity<Service>(service, HttpStatus.OK);
     }
 
-    // @GetMapping("/employes/{id}")
-    // public ResponseEntity<List<Employe>> getEmployeAbsence(@PathVariable("id")
-    // Long id) {
-    // List<Employe> employes = this.serviceService.getServiceEmployes(id);
-    // return new ResponseEntity<List<Employe>>(employes, HttpStatus.OK);
-    // }
+    @GetMapping("/employes/{id}")
+    public ResponseEntity<List<Employe>> getEmployeAbsence(@PathVariable("id") Long id) {
+        List<Employe> employes = this.serviceService.getServiceEmployes(id);
+        return new ResponseEntity<List<Employe>>(employes, HttpStatus.OK);
+    }
 
     @PostMapping("/")
     @PreAuthorize("hasAnyAuthority('ROLE_SUPER_ADMIN')")
