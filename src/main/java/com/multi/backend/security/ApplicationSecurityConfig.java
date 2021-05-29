@@ -54,7 +54,6 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
                         new JwtUsernameAndPasswordAuthenticationFilter(authenticationManager(), jwtConfig, secretKey))
                 .addFilterAfter(new JwtTokenVerifier(secretKey, jwtConfig),
                         JwtUsernameAndPasswordAuthenticationFilter.class)
-                .and()
                 .authorizeRequests()
                 .antMatchers("/", "index", 
                              "/v2/api-docs", 
