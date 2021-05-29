@@ -57,8 +57,8 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/", "index", 
                              "/v2/api-docs", 
-                             "webjars/**", 
-                             "swagger-ui.html",
+                             "/webjars/**", 
+                             "/swagger-ui.html",
                              "/swagger-ui/**",
                              "/configuration/ui",
                              "/configuration/security",
