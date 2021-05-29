@@ -3,7 +3,7 @@ package com.multi.backend.controllers;
 import java.util.List;
 
 // import com.multi.backend.models.Employe;
-// import com.multi.backend.models.Employe;
+import com.multi.backend.models.Employe;
 import com.multi.backend.models.Service;
 // import com.multi.backend.services.ServiceEmploye;
 import com.multi.backend.services.ServiceService;
@@ -45,7 +45,7 @@ public class ServiceController {
     }
 
     @GetMapping("/employes/{id}")
-    public ResponseEntity<List<Employe>> getEmployeAbsence(@PathVariable("id") Long id) {
+    public ResponseEntity<List<Employe>> getServiceEmployes(@PathVariable("id") Long id) {
         List<Employe> employes = this.serviceService.getServiceEmployes(id);
         return new ResponseEntity<List<Employe>>(employes, HttpStatus.OK);
     }
