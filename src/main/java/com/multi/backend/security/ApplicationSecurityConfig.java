@@ -50,12 +50,7 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.cors().and().csrf().disable().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
-                .addFilter(
-                        new JwtUsernameAndPasswordAuthenticationFilter(authenticationManager(), jwtConfig, secretKey))
-                .addFilterAfter(new JwtTokenVerifier(secretKey, jwtConfig),
-                        JwtUsernameAndPasswordAuthenticationFilter.class)
                 .authorizeRequests()
-                .and()
                 .antMatchers("/", "index", 
                              "/v2/api-docs", 
                              "webjars/**", 
@@ -69,6 +64,11 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
                              "/js/*",
                              "/api/users/reset-password",
                              "/api/users/username-already-exists").permitAll()
+                .and()
+                .addFilter(
+                        new JwtUsernameAndPasswordAuthenticationFilter(authenticationManager(), jwtConfig, secretKey))
+                .addFilterAfter(new JwtTokenVerifier(secretKey, jwtConfig),
+                        JwtUsernameAndPasswordAuthenticationFilter.class)
                 .anyRequest().authenticated();
     }
 
