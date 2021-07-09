@@ -57,7 +57,7 @@ public class PointageController {
     // }
 
     @DeleteMapping("{id}")
-    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'SUPER_ADMIN')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_SUPER_ADMIN')")
     public ResponseEntity<Pointage> deletePointage(@PathVariable("id") Long id) {
         Pointage pointage = this.servicePointage.getPointageById(id);
         this.servicePointage.deletePointage(pointage.getId());
