@@ -33,7 +33,8 @@ public class ServiceAbsence {
 
     public Absence updateAbsence(Absence absence) {
         Absence registeredAbsence = this.getAbsenceById(absence.getId());
-        List<String> fields = Arrays.asList("dateFom","dateTo", "justificatif");
+        List<String> fields = Arrays.asList("fromDate","toDate", "justificatif", "type");
+        registeredAbsence.setEmploye(absence.getEmploye));
         registeredAbsence = this.conv.pour(registeredAbsence, absence,fields);
         return this.absenceRepo.save(registeredAbsence);
     }
