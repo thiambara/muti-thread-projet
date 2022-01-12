@@ -67,7 +67,21 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
                              "/css/*", 
                              "/js/*",
                              "/api/users/reset-password",
-                             "/api/users/username-already-exists").permitAll()
+                             "/api/users/username-already-exists")
+                .permitAll()
+                .and()
+                    .authorizeRequests()
+                    .antMatchers(HttpMethod.GET, "/webjars/**")
+                    .permitAll()
+                .and()
+                    .authorizeRequests()
+                    .antMatchers(HttpMethod.GET, "/swagger-ui.html/**")
+                    .permitAll()
+
+                .and()
+                .authorizeRequests()
+                .antMatchers(HttpMethod.GET, "/swagger-resources/**")
+                .permitAll()
                 
                 .anyRequest().authenticated();
     }
